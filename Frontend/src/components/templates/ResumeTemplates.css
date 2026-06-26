@@ -1,0 +1,285 @@
+.resume {
+  width: 900px;
+  margin: 40px auto;
+  background: white;
+  padding: 50px;
+  color: black;
+  font-family: Georgia, serif;
+}
+
+.resume h1 {
+  margin: 0;
+}
+
+.resume section {
+  margin-top: 30px;
+}
+
+.resume h2 {
+  border-bottom: 1px solid black;
+  padding-bottom: 8px;
+}
+
+/* CLASSIC */
+.classic-header {
+  text-align: center;
+}
+
+/* PROFESSIONAL */
+.pro-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.pro-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+/* MODERN */
+.modern-header {
+  text-align: center;
+}
+
+.modern-header h1 {
+  font-size: 48px;
+  color: #1f3b63;
+}
+
+.modern-header h3 {
+  color: #1f3b63;
+}
+
+.chip {
+  display: inline-block;
+  padding: 8px 14px;
+  margin: 5px;
+  border-radius: 20px;
+  background: #eef3fb;
+}
+
+
+.resume.classic {
+  width: 900px;
+  margin: auto;
+  background: white;
+  color: #111;
+  padding: 50px 60px;
+  font-family: "Times New Roman", serif;
+  line-height: 1.5;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.classic-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.classic-header h1 {
+  font-size: 48px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.classic-header p {
+  font-size: 22px;
+}
+
+.classic-section {
+  margin-bottom: 30px;
+}
+
+.classic-section h2 {
+  font-size: 28px;
+  border-bottom: 2px solid black;
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+}
+
+.classic-summary {
+  font-size: 22px;
+}
+
+.classic-block {
+  margin-bottom: 18px;
+}
+
+.classic-project h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.classic-project ul,
+.classic-block ul {
+  padding-left: 25px;
+}
+
+.classic-project li,
+.classic-block li {
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.resume.classic p {
+  font-size: 20px;
+}
+/* PROFESSIONAL TEMPLATE */
+
+.resume.professional {
+  width: 1000px;
+  margin: auto;
+  background: white;
+  padding: 50px;
+  color: #222;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.pro-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.pro-header h1 {
+  font-size: 58px;
+  font-weight: 300;
+  letter-spacing: 8px;
+  margin-bottom: 10px;
+}
+
+.pro-header p {
+  font-size: 28px;
+  letter-spacing: 4px;
+  color: #9a7a2e;
+}
+
+.pro-divider {
+  height: 3px;
+  background: #b89b5e;
+  margin-bottom: 35px;
+}
+
+.pro-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 45px;
+}
+
+.pro-left section,
+.pro-right section {
+  margin-bottom: 35px;
+}
+
+.pro-left h2,
+.pro-right h2 {
+  font-size: 24px;
+  letter-spacing: 6px;
+  font-weight: 400;
+  margin-bottom: 18px;
+}
+
+.pro-left p,
+.pro-right p,
+.pro-right li,
+.pro-left li {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.pro-block {
+  margin-bottom: 22px;
+}
+
+.pro-block h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.pro-right ul,
+.pro-left ul {
+  padding-left: 20px;
+}
+
+.resume.modern {
+  width: 1000px;
+  margin: auto;
+  background: white;
+  padding: 50px;
+  font-family: Arial, sans-serif;
+  color: #2e4a6f;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.modern-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.modern-header h1 {
+  font-size: 54px;
+  font-weight: 800;
+  color: #2f4f79;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.modern-header h3 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #2f4f79;
+  text-transform: uppercase;
+}
+
+.modern-contact {
+  font-size: 18px;
+  color: #3b5f8a;
+}
+
+.modern-bar {
+  margin-top: 20px;
+  height: 12px;
+  background: #2f4f79;
+  border-bottom: 3px solid #1f324d;
+}
+
+.modern-section {
+  margin-top: 30px;
+}
+
+.modern-section h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #2f4f79;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #9ba8b8;
+  padding-bottom: 8px;
+}
+
+.modern-section p,
+.modern-section li {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.modern-block {
+  margin-bottom: 20px;
+}
+
+.modern-block h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.modern-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.modern-chip {
+  padding: 8px 14px;
+  background: #eaf0f8;
+  border-radius: 999px;
+  font-size: 16px;
+}
