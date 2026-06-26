@@ -37,7 +37,8 @@ function OptimizeResume() {
     }
   ];
 
-  const handleRewrite = async () => {
+  const handleRewrite = async (e) => {
+    e.preventDefault();
     if (!resume || !jobDescription || !selectedTemplate) {
       alert("Fill all fields");
       return;
@@ -108,113 +109,108 @@ function OptimizeResume() {
     }
   };
 
+  const handleExportPDF = () => {
+    window.print();
+  };
+
   return (
-    <div style={{ padding: "30px" }}>
-      <h1>Optimize Resume</h1>
-
-      <input
-        type="file"
-        accept=".pdf"
-        onChange={(e) => setResume(e.target.files[0])}
-      />
-
-      <br />
-      <br />
-
-      <textarea
-        rows="10"
-        cols="80"
-        placeholder="Paste Job Description"
-        value={jobDescription}
-        onChange={(e) =>
-          setJobDescription(e.target.value)
-        }
-      />
-
-      <h3>Select Template</h3>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "20px",
-          marginTop: "20px"
-        }}
-      >
-        {templates.map((temp) => (
-          <div
-            key={temp.id}
-            onClick={() => setSelectedTemplate(temp.id)}
-            style={{
-              border:
-                selectedTemplate === temp.id
-                  ? "3px solid #4cc9ff"
-                  : "1px solid #444",
-              borderRadius: "16px",
-              padding: "12px",
-              cursor: "pointer",
-              background: "#111827"
-            }}
-          >
-            <img
-              src={temp.image}
-              alt={temp.name}
-              style={{
-                width: "100%",
-                height: "280px",
-                objectFit: "cover",
-                borderRadius: "10px"
-              }}
-            />
-
-            <h4
-              style={{
-                color: "white",
-                textAlign: "center",
-                marginTop: "12px"
-              }}
-            >
-              {temp.name}
-            </h4>
-          </div>
-        ))}
+    <div className="optimize-container">
+      <div className="optimize-header">
+        <h1>AI Resume Optimizer</h1>
+        <p>Tailor your resume for any job description in seconds</p>
       </div>
 
-      <br />
+      <div className="optimize-form">
+        <div className="form-group">
+          <label>1. Upload Your Current Resume (PDF)</label>
+          <label className="file-upload-wrapper">
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={(e) => setResume(e.target.files[0])}
+            />
+            <div className="file-upload-text">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>{resume ? resume.name : <>Drop your PDF here or <span className="highlight">browse</span></>}</span>
+            </div>
+          </label>
+        </div>
 
-      <button onClick={handleRewrite}>
-        Rewrite Resume
-      </button>
+        <div className="form-group">
+          <label>2. Target Job Description</label>
+          <textarea
+            className="custom-textarea"
+            placeholder="Paste the job description here to align your resume with the requirements..."
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
+          />
+        </div>
 
-      {loading && <h3>Rewriting...</h3>}
+        <div className="form-group">
+          <label>3. Select a Design Template</label>
+          <div className="template-grid">
+            {templates.map((temp) => (
+              <div
+                key={temp.id}
+                className={`template-card ${selectedTemplate === temp.id ? "selected" : ""}`}
+                onClick={() => setSelectedTemplate(temp.id)}
+              >
+                <img src={temp.image} alt={temp.name} />
+                <h4>{temp.name}</h4>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="action-container">
+          <button 
+            type="button"
+            className="rewrite-btn" 
+            onClick={handleRewrite}
+            disabled={loading}
+          >
+            {loading ? "Optimizing..." : "Optimize Resume"}
+          </button>
+        </div>
+      </div>
+
+      {loading && (
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <h3>AI is analyzing and rewriting your resume...</h3>
+        </div>
+      )}
 
       {result && (
         <div className="optimized-result">
-          <div className="score-box">
-            <h2>ATS Score</h2>
-            <div className="score-circle">
-              {result.atsScore || 0}
+          <div className="result-header">
+            <div className="score-box">
+              <h2>ATS Score</h2>
+              <div className="score-circle">
+                {result.atsScore || 0}%
+              </div>
             </div>
+            <button className="export-btn" onClick={handleExportPDF}>
+              Export PDF
+            </button>
           </div>
 
-          {renderSelectedTemplate()}
-
-          <section>
-            <h3>Missing Keywords</h3>
-            <div className="missing-box">
-              {result.missingKeywords?.map(
-                (keyword, i) => (
+          {result.missingKeywords && result.missingKeywords.length > 0 && (
+            <section>
+              <h3 style={{color: '#cbd5e1', marginBottom: '10px'}}>Keywords Added / Missing from Original</h3>
+              <div className="missing-box">
+                {result.missingKeywords.map((keyword, i) => (
                   <span key={i} className="missing-pill">
                     {keyword}
                   </span>
-                )
-              )}
-            </div>
-          </section>
+                ))}
+              </div>
+            </section>
+          )}
 
-          <button className="export-btn">
-            Export PDF
-          </button>
+          <div className="resume-preview-container">
+            {renderSelectedTemplate()}
+          </div>
         </div>
       )}
     </div>

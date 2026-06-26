@@ -221,7 +221,8 @@ export default function ATSAnalyzer() {
 
   const handleFile = (f) => { if (f) setResume(f); };
 
-  const handleAnalyze = async () => {
+  const handleAnalyze = async (e) => {
+    e.preventDefault();
     if (!resume || !jobDescription.trim()) {
       alert("Please upload a resume and paste a job description.");
       return;
@@ -333,7 +334,7 @@ export default function ATSAnalyzer() {
         </div>
       </div>
 
-      <button className="analyze-btn" onClick={handleAnalyze} disabled={loading}>
+      <button type="button" className="analyze-btn" onClick={handleAnalyze} disabled={loading}>
         {loading ? <><span className="spinner" /> Analyzing…</> : "🔍 Analyze Resume"}
       </button>
 
