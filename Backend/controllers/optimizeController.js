@@ -1,4 +1,4 @@
-const pdfParse = require("pdf-parse");
+const extractPDFText = require("../utils/pdfparser");
 const optimizeWithGroq = require("../services/optimizeWithGroq");
 
 const optimizeResume = async (req, res) => {
@@ -11,13 +11,8 @@ const optimizeResume = async (req, res) => {
       });
     }
 
-    const fileBuffer = req.file.buffer;
-    console.log("File received");
-
-    const pdfData = await pdfParse(fileBuffer);
-    console.log("PDF parsed successfully");
-
-    const resumeText = pdfData.text;
+    const resumeText = await extractPDFText(req.file);
+    console.log("Resume text extracted successfully");
 
     const { jobDescription, template } = req.body;
 

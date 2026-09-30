@@ -1,8 +1,12 @@
+import React from "react";
 import "./ResumeTemplates.css";
 
 function ModernTemplate({ data }) {
   return (
-    <div className="resume modern" contentEditable={true} suppressContentEditableWarning={true}>
+    <div 
+      className="resume modern" 
+      suppressContentEditableWarning={true}
+    >
       <div className="modern-header">
         <h1>{data.name || "Candidate Name"}</h1>
         <h3>{data.role || "Software Engineer"}</h3>
@@ -150,4 +154,4 @@ function ModernTemplate({ data }) {
   );
 }
 
-export default ModernTemplate;
+export default React.memo(ModernTemplate);

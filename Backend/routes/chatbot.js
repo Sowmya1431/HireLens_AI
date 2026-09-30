@@ -13,7 +13,7 @@ router.post("/chat", async (req, res) => {
     }
 
     const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: process.env.GROQ_MODEL || "openai/gpt-oss-120b",
       temperature: 0.7,
       max_tokens: 1024,
       messages: [
@@ -47,7 +47,7 @@ router.post("/chat/resume-questions", async (req, res) => {
     }
 
     const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: process.env.GROQ_MODEL || "openai/gpt-oss-120b",
       temperature: 0.7,
       max_tokens: 1500,
       messages: [

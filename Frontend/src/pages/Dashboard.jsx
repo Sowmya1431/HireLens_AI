@@ -15,6 +15,8 @@ function Dashboard() {
         return (
           <DashboardHome
             historyEndpoint={`${API}/ats/history`}
+            apiEndpoint={`${API}/ats/latest`}
+            onNavigate={setActivePage}
           />
         );
       case "ats":

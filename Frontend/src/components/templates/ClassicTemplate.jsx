@@ -1,8 +1,12 @@
+import React from "react";
 import "./ResumeTemplates.css";
 
 function ClassicTemplate({ data }) {
   return (
-    <div className="resume classic" contentEditable={true} suppressContentEditableWarning={true}>
+    <div 
+      className="resume classic" 
+      suppressContentEditableWarning={true}
+    >
       {/* Header */}
       <div className="classic-header">
         <h1>{data.name || "Candidate Name"}</h1>
@@ -151,4 +155,4 @@ function ClassicTemplate({ data }) {
   );
 }
 
-export default ClassicTemplate;
+export default React.memo(ClassicTemplate);

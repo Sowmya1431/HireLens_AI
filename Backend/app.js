@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
-const resumeRoutes = require('./routes/resumeRoutes');
-const atsRoutes = require('./routes/atsRoutes');
+const resumeRoutes = require('./routes/resumeroutes');
+const atsRoutes = require('./routes/atsroutes');
 const contactRoutes = require("./routes/contactRoutes");
 const optimizeRoutes = require("./routes/optimizeRoutes"); // NEW
 const chatbotRoutes = require("./routes/chatbot");

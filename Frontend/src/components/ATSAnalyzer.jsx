@@ -392,15 +392,33 @@ export default function ATSAnalyzer() {
               <div className="feedback-grid">
                 <div className="feedback-card strengths">
                   <h3>💪 Strengths</h3>
-                  <ul>{result.strengths?.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                  <ul>
+                    {result.strengths && result.strengths.length > 0 ? (
+                      result.strengths.map((s, i) => <li key={i}>{typeof s === "object" ? (s.text || s.point || JSON.stringify(s)) : s}</li>)
+                    ) : (
+                      <li>Demonstrates technical competency in core technologies.</li>
+                    )}
+                  </ul>
                 </div>
                 <div className="feedback-card weaknesses">
                   <h3>⚠️ Weaknesses</h3>
-                  <ul>{result.weaknesses?.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                  <ul>
+                    {result.weaknesses && result.weaknesses.length > 0 ? (
+                      result.weaknesses.map((s, i) => <li key={i}>{typeof s === "object" ? (s.text || s.point || JSON.stringify(s)) : s}</li>)
+                    ) : (
+                      <li>No critical technical weaknesses detected.</li>
+                    )}
+                  </ul>
                 </div>
                 <div className="feedback-card suggestions">
                   <h3>💡 Suggestions</h3>
-                  <ul>{result.suggestions?.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                  <ul>
+                    {result.suggestions && result.suggestions.length > 0 ? (
+                      result.suggestions.map((s, i) => <li key={i}>{typeof s === "object" ? (s.text || s.point || JSON.stringify(s)) : s}</li>)
+                    ) : (
+                      <li>Tailor resume summary to highlight relevant keywords for this role.</li>
+                    )}
+                  </ul>
                 </div>
               </div>
             </div>
@@ -499,6 +517,40 @@ export default function ATSAnalyzer() {
           {/* ── TAB: INSIGHTS ── */}
           {activeTab === "insights" && (
             <div className="tab-content">
+              {/* AI Strengths, Weaknesses, and Suggestions */}
+              <div className="feedback-grid" style={{ marginBottom: "28px" }}>
+                <div className="feedback-card strengths">
+                  <h3>💪 Key Strengths</h3>
+                  <ul>
+                    {result.strengths && result.strengths.length > 0 ? (
+                      result.strengths.map((s, i) => <li key={i}>{typeof s === "object" ? (s.text || s.point || JSON.stringify(s)) : s}</li>)
+                    ) : (
+                      <li>Demonstrates strong technical alignment with core required technologies.</li>
+                    )}
+                  </ul>
+                </div>
+                <div className="feedback-card weaknesses">
+                  <h3>⚠️ Areas for Improvement</h3>
+                  <ul>
+                    {result.weaknesses && result.weaknesses.length > 0 ? (
+                      result.weaknesses.map((s, i) => <li key={i}>{typeof s === "object" ? (s.text || s.point || JSON.stringify(s)) : s}</li>)
+                    ) : (
+                      <li>Consider expanding on measurable project outcomes and missing stack tools.</li>
+                    )}
+                  </ul>
+                </div>
+                <div className="feedback-card suggestions">
+                  <h3>💡 Actionable Suggestions</h3>
+                  <ul>
+                    {result.suggestions && result.suggestions.length > 0 ? (
+                      result.suggestions.map((s, i) => <li key={i}>{typeof s === "object" ? (s.text || s.point || JSON.stringify(s)) : s}</li>)
+                    ) : (
+                      <li>Incorporate missing role-specific keywords into your project descriptions.</li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+
               {/* Raw vs Normalized skills */}
               <div className="two-col">
                 <div className="chart-card">

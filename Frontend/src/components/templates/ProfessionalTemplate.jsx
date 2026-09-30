@@ -1,8 +1,12 @@
+import React from "react";
 import "./ResumeTemplates.css";
 
 function ProfessionalTemplate({ data }) {
   return (
-    <div className="resume professional" contentEditable={true} suppressContentEditableWarning={true}>
+    <div 
+      className="resume professional" 
+      suppressContentEditableWarning={true}
+    >
       {/* Header */}
       <div className="pro-header">
         <h1>{data.name || "Candidate Name"}</h1>
@@ -154,4 +158,4 @@ function ProfessionalTemplate({ data }) {
   );
 }
 
-export default ProfessionalTemplate;
+export default React.memo(ProfessionalTemplate);

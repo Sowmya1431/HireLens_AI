@@ -1,5 +1,69 @@
 const groq = require("../config/groqConfig");
-const analyzeWithGroq = require("./groqService");
+
+/* ─── Robust JSON Auto-Repair Functions ─── */
+function cleanAndCloseJSON(str) {
+  let s = str.trim().replace(/,\s*([\]}])/g, "$1");
+  let inString = false;
+  let stack = [];
+
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+    const prev = s[i - 1];
+
+    if (char === '"' && prev !== '\\') {
+      inString = !inString;
+    } else if (!inString) {
+      if (char === '{' || char === '[') {
+        stack.push(char);
+      } else if (char === '}' && stack[stack.length - 1] === '{') {
+        stack.pop();
+      } else if (char === ']' && stack[stack.length - 1] === '[') {
+        stack.pop();
+      }
+    }
+  }
+
+  if (inString) s += '"';
+  s = s.replace(/,\s*$/, "");
+
+  while (stack.length > 0) {
+    const last = stack.pop();
+    if (last === '{') s += '}';
+    else if (last === '[') s += ']';
+  }
+
+  return s.replace(/,\s*([\]}])/g, "$1");
+}
+
+function safeParseJSON(rawStr) {
+  if (!rawStr) throw new Error("Empty AI response");
+
+  let str = rawStr.trim();
+  const firstBrace = str.indexOf("{");
+  const lastBrace = str.lastIndexOf("}");
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    str = str.slice(firstBrace, lastBrace + 1);
+  }
+
+  // 1. Direct parse
+  try {
+    return JSON.parse(str);
+  } catch (_) {}
+
+  // 2. Trailing comma cleanup
+  let cleaned = str.replace(/,\s*([\]}])/g, "$1");
+  try {
+    return JSON.parse(cleaned);
+  } catch (_) {}
+
+  // 3. Repair incomplete or unclosed JSON
+  let repaired = cleanAndCloseJSON(str);
+  try {
+    return JSON.parse(repaired);
+  } catch (_) {}
+
+  return JSON.parse(cleaned);
+}
 
 const optimizeWithGroq = async (
   resumeText,
@@ -7,366 +71,167 @@ const optimizeWithGroq = async (
   template
 ) => {
   try {
-    console.log("Starting ATS analysis...");
+    console.log("Starting ATS resume optimization...");
 
-    const atsResult = await analyzeWithGroq(
-      resumeText,
-      jobDescription
-    );
-
-    console.log("ATS analysis completed");
+    const safeResume = (resumeText || "").trim().slice(0, 8000);
+    const safeJd = (jobDescription || "").trim().slice(0, 3500);
 
     const prompt = `
 You are HireLens AI Resume Optimizer, an advanced ATS resume rewriting engine.
 
-INPUTS:
-Resume:
-${resumeText}
+RESUME CONTENT:
+${safeResume}
 
-Job Description:
-${jobDescription}
+TARGET JOB DESCRIPTION:
+${safeJd}
 
-Selected Template:
-${template}
-
-ATS Analysis:
-${JSON.stringify(atsResult)}
-
-========================
-PHASE 1 — RESUME PARSING
-========================
-
-FIRST parse the uploaded resume completely before optimization.
-
-Extract ALL available information into these sections:
-
-* name
-* contact
-* role
-* summary (if present)
-* education
-* skills
-* projects
-* experience / internships
-* certifications
-* additionalInfo
-
-IMPORTANT:
-Never skip any section.
-
-If the resume contains extra sections such as:
-
-* achievements
-* hackathons
-* volunteering
-* publications
-* research
-* languages
-* awards
-* extracurricular activities
-
-Put them into:
-additionalInfo
-
-If a standard section is absent, return empty array.
-
-========================
-PHASE 2 — ATS OPTIMIZATION
-==========================
+SELECTED TEMPLATE:
+${template || "modern"}
 
 OBJECTIVES:
+1. Rewrite and elevate the resume content to achieve a high ATS compatibility match (88-97) for the target role.
+2. ABSOLUTE TRUTH: Never invent fake companies, fake degrees, or fake projects. Enhance technical wording, action verbs, and quantifiable impact.
+3. Align keywords from the Job Description naturally into the Summary, Skills, Projects, and Experience sections.
+4. Summary: 3-4 recruiter-grade sentences (70-120 words) with clear technical stack and value proposition.
+5. Projects: 2-4 key projects. Each project should have 3-4 bullet points highlighting architecture, technologies used, and measurable results.
+6. Experience / Internships: 2-3 entries with 3-4 professional bullet points highlighting practical problem solving.
 
-1. Rewrite the entire resume into a highly ATS-optimized version.
-
-2. Maintain ABSOLUTE TRUTH.
-   NEVER invent:
-
-* fake experience
-* fake internships
-* fake degrees
-* fake certifications
-* fake companies
-* fake universities
-* fake technologies
-
-Only improve wording and formatting.
-
-3. Keyword Optimization
-
-Extract all important keywords from Job Description.
-
-Classify them into:
-
-* required keywords
-* preferred keywords
-
-IMPORTANT:
-At least 80% of high-priority JD keywords must appear naturally across:
-
-* professional summary
-* projects
-* internships / work experience
-* skills (only if already present in resume)
-
-Do NOT concentrate keywords only inside skills.
-
-Spread them across ALL sections.
-
-4. Missing Keywords Rule
-
-If a keyword appears in JD but NOT anywhere in resume:
-
-DO NOT insert it into resume content.
-
-Put it ONLY inside:
-missingKeywords
-
-========================
-PROFESSIONAL SUMMARY RULES
-==========================
-
-Generate a strong ATS summary.
-
-Requirements:
-
-* Exactly 4–5 sentences
-* 100–150 words
-* Strong technical vocabulary
-* Mention primary stack
-* Mention problem solving
-* Mention collaboration
-* Mention scalability / performance / software engineering practices
-
-Summary must sound recruiter-grade.
-
-Weak summaries are forbidden.
-
-========================
-PROJECT RULES
-=============
-
-For EVERY project:
-
-Return:
+OUTPUT FORMAT:
+Return ONLY a valid JSON object matching this exact schema:
 
 {
-title,
-description:[]
-}
-
-Rules:
-
-* Minimum 4 bullet points
-* Maximum 6 bullet points
-* EACH bullet minimum 35 words
-* Each bullet must be detailed and technical
-* Use strong action verbs
-
-Each bullet must include at least one of:
-
-* architecture
-* technologies used
-* APIs
-* database
-* scalability
-* performance
-* optimization
-* security
-* measurable impact
-
-BAD:
-Built web app using React.
-
-FORBIDDEN.
-
-GOOD:
-Developed a scalable MERN-stack web platform using reusable React components, RESTful API integration, and MongoDB schema optimization, improving application responsiveness by 35% and reducing data retrieval latency significantly.
-
-IMPORTANT:
-If any bullet has fewer than 35 words, regenerate it.
-
-========================
-EXPERIENCE / INTERNSHIP RULES
-=============================
-
-For EVERY experience/internship:
-
-Return:
-
-{
-role,
-company,
-duration,
-responsibilities:[]
-}
-
-Rules:
-
-* Minimum 4 bullet points
-* Maximum 6 bullet points
-* EACH bullet minimum 35 words
-* Technical + impact focused
-* Include collaboration
-* Include debugging / testing / development / optimization
-
-Every bullet must be professional and interview-ready.
-
-If bullet <35 words, regenerate.
-
-========================
-SKILLS RULES
-============
-
-Return only real skills from resume.
-
-Never add fake skills.
-
-Remove duplicates.
-
-========================
-EDUCATION RULES
-===============
-
-Preserve original degree and university.
-
-Only improve formatting.
-
-========================
-CERTIFICATION RULES
-===================
-
-Preserve all certifications.
-
-========================
-ATS SCORE RULES
-===============
-
-Calculate optimized ATS score using:
-
-* keyword coverage
-* section completeness
-* technical relevance
-* project quality
-* experience quality
-
-Score range:
-85–98
-
-========================
-OUTPUT RULES
-============
-
-Return ONLY valid JSON.
-
-{
-"atsScore": 92,
-"template": "${template}",
-"name": "",
-"contact": "",
-"role": "",
-"summary": "",
-"education": [],
-"skills": [],
-"projects": [
-{
-"title": "",
-"description": []
-}
-],
-"experience": [
-{
-"role": "",
-"company": "",
-"duration": "",
-"responsibilities": []
-}
-],
-"certifications": [],
-"additionalInfo": [],
-"missingKeywords": []
+  "atsScore": 93,
+  "template": "${template || "modern"}",
+  "name": "",
+  "contact": "",
+  "role": "",
+  "summary": "",
+  "education": [
+    {
+      "degree": "",
+      "institution": "",
+      "period": "",
+      "cgpa": ""
+    }
+  ],
+  "skills": [],
+  "projects": [
+    {
+      "title": "",
+      "description": []
+    }
+  ],
+  "experience": [
+    {
+      "role": "",
+      "company": "",
+      "duration": "",
+      "responsibilities": []
+    }
+  ],
+  "certifications": [],
+  "additionalInfo": [],
+  "missingKeywords": []
 }
 
 STRICT:
-
-* No markdown
-* No explanation
-* Response must start with {
-* Response must end with }
+- Output JSON only.
+- No markdown code blocks, no backticks, no explanations.
 `;
 
-    let completion;
-
+    // Query active Groq models
+    let activeIds = [];
     try {
-      completion =
-        await groq.chat.completions.create({
+      const list = await groq.models.list();
+      activeIds = (list.data || []).map(m => m.id);
+    } catch (_) {}
+
+    // Prioritized model list
+    const candidateModels = [
+      "qwen/qwen3.8-27b",
+      "openai/gpt-oss-120b",
+      "openai/gpt-oss-20b",
+      "allam-2-7b"
+    ];
+
+    const validModels = candidateModels.filter(m => activeIds.length === 0 || activeIds.includes(m));
+    const uniqueModels = validModels.length > 0 ? validModels : candidateModels;
+
+    let parsed = null;
+    let lastError = null;
+
+    for (const m of uniqueModels) {
+      try {
+        console.log(`>>> ATTEMPTING OPTIMIZE WITH GROQ MODEL: ${m}`);
+
+        const tokenLimit = m.includes("qwen") ? 1400 : 1800;
+
+        const createParams = {
           messages: [
+            {
+              role: "system",
+              content: "You are an ATS resume rewriting engine. You MUST output ONLY a valid JSON object matching the requested schema. Never output markdown, never output thinking tags, and never output conversational text."
+            },
             {
               role: "user",
               content: prompt
             }
           ],
-          model: "llama-3.3-70b-versatile",
-          temperature: 0.2
-        });
-    } catch (err) {
-      console.error("GROQ API ERROR:", err);
-      throw new Error("Groq API request failed");
-    }
+          model: m,
+          temperature: 0.2,
+          max_tokens: tokenLimit
+        };
 
-    let response =
-      completion?.choices?.[0]?.message?.content;
+        let completion;
+        try {
+          completion = await groq.chat.completions.create({
+            ...createParams,
+            response_format: { type: "json_object" }
+          });
+        } catch (_) {
+          completion = await groq.chat.completions.create(createParams);
+        }
 
-    if (!response) {
-      throw new Error("Empty Groq response");
-    }
+        let raw = completion?.choices?.[0]?.message?.content || "";
+        console.log(`>>> GROQ OPTIMIZE RESPONSE FROM ${m} (length ${raw.length})`);
 
-    console.log("RAW GROQ RESPONSE:");
-    console.log(response);
+        if (!raw || raw.trim().length === 0) {
+          console.warn(`Model ${m} returned empty content, trying next candidate model...`);
+          continue;
+        }
 
-    response = response
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
+        raw = raw
+          .replace(/<think>[\s\S]*?<\/think>/gi, "")
+          .replace(/```json/gi, "")
+          .replace(/```/gi, "")
+          .trim();
 
-    let parsed;
-
-    try {
-      parsed = JSON.parse(response);
-    } catch (err) {
-      console.log("Direct parse failed. Trying fallback...");
-
-      const first = response.indexOf("{");
-      const last = response.lastIndexOf("}");
-
-      if (first === -1 || last === -1) {
-        throw new Error(
-          "No valid JSON found in Groq response"
-        );
-      }
-
-      const json = response.slice(first, last + 1);
-
-      try {
-        parsed = JSON.parse(json);
-      } catch (parseErr) {
-        console.error("Fallback parse failed:", parseErr);
-        throw new Error("Invalid JSON from Groq");
+        parsed = safeParseJSON(raw);
+        console.log(`>>> GROQ OPTIMIZE SUCCESS & VALID JSON FROM MODEL: ${m}`);
+        break;
+      } catch (err) {
+        lastError = err;
+        console.warn(`Model ${m} failed:`, err.message);
       }
     }
 
-    parsed.atsScore ||= 0;
-    parsed.template ||= template;
-    parsed.name ||= "";
-    parsed.contact ||= "";
-    parsed.role ||= "";
-    parsed.summary ||= "";
-    parsed.education ||= [];
-    parsed.skills ||= [];
-    parsed.projects ||= [];
-    parsed.experience ||= [];
-    parsed.certifications ||= [];
-    parsed.additionalInfo ||= [];
-    parsed.missingKeywords ||= [];
+    if (!parsed) {
+      throw new Error("Could not optimize resume from AI: " + (lastError?.message || "Empty response from models"));
+    }
+
+    parsed.atsScore = Math.max(85, Math.min(99, Number(parsed.atsScore) || 92));
+    parsed.template = template || parsed.template || "modern";
+    parsed.name = parsed.name || "";
+    parsed.contact = typeof parsed.contact === "object" ? JSON.stringify(parsed.contact) : (parsed.contact || "");
+    parsed.role = parsed.role || "";
+    parsed.summary = parsed.summary || "";
+    parsed.education = Array.isArray(parsed.education) ? parsed.education : [];
+    parsed.skills = Array.isArray(parsed.skills) ? parsed.skills : [];
+    parsed.projects = Array.isArray(parsed.projects) ? parsed.projects : [];
+    parsed.experience = Array.isArray(parsed.experience) ? parsed.experience : [];
+    parsed.certifications = Array.isArray(parsed.certifications) ? parsed.certifications : [];
+    parsed.additionalInfo = Array.isArray(parsed.additionalInfo) ? parsed.additionalInfo : [];
+    parsed.missingKeywords = Array.isArray(parsed.missingKeywords) ? parsed.missingKeywords : [];
 
     return parsed;
   } catch (error) {

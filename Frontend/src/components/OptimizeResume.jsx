@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import classicImg from "./templates/classic.png";
 import professionalImg from "./templates/professional.png";
 import modernImg from "./templates/modern.png";
@@ -15,9 +15,14 @@ function OptimizeResume() {
 
   const [resume, setResume] = useState(null);
   const [jobDescription, setJobDescription] = useState("");
-  const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState("modern");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [renderKey, setRenderKey] = useState(0);
+
+  const resumeRef = useRef(null);
 
   const templates = [
     {
@@ -91,26 +96,128 @@ function OptimizeResume() {
     }
   };
 
+  useEffect(() => {
+    const resumeEl = resumeRef.current?.querySelector(".resume");
+    if (!resumeEl) return;
+
+    if (isEditing) {
+      resumeEl.setAttribute("contenteditable", "true");
+      resumeEl.setAttribute("spellcheck", "true");
+      resumeEl.classList.add("is-editing");
+    } else {
+      resumeEl.setAttribute("contenteditable", "false");
+      resumeEl.classList.remove("is-editing");
+    }
+  }, [isEditing, selectedTemplate, renderKey, result]);
+
+  const handleToggleEdit = () => {
+    const resumeEl = resumeRef.current?.querySelector(".resume");
+    const nextState = !isEditing;
+    setIsEditing(nextState);
+
+    if (resumeEl) {
+      if (nextState) {
+        resumeEl.setAttribute("contenteditable", "true");
+        resumeEl.setAttribute("spellcheck", "true");
+        resumeEl.classList.add("is-editing");
+        const firstHeading = resumeEl.querySelector("h1, h2, p");
+        if (firstHeading) {
+          firstHeading.focus();
+        }
+      } else {
+        resumeEl.setAttribute("contenteditable", "false");
+        resumeEl.classList.remove("is-editing");
+      }
+    }
+  };
+
+  const handleResetToOriginal = () => {
+    if (window.confirm("Discard all manual edits and reset back to the AI-generated resume?")) {
+      setRenderKey((prev) => prev + 1);
+    }
+  };
+
   const renderSelectedTemplate = () => {
     if (!result) return null;
 
     switch (selectedTemplate) {
       case "classic":
-        return <ClassicTemplate data={result} />;
+        return <ClassicTemplate key={`classic-${renderKey}`} data={result} />;
 
       case "professional":
-        return <ProfessionalTemplate data={result} />;
+        return <ProfessionalTemplate key={`pro-${renderKey}`} data={result} />;
 
       case "modern":
-        return <ModernTemplate data={result} />;
+        return <ModernTemplate key={`modern-${renderKey}`} data={result} />;
 
       default:
         return null;
     }
   };
 
-  const handleExportPDF = () => {
-    window.print();
+  const handleExportPDF = async () => {
+    const element = resumeRef.current?.querySelector(".resume") || resumeRef.current;
+    if (!element) {
+      alert("No resume found to export.");
+      return;
+    }
+
+    try {
+      setExporting(true);
+
+      const candidateName = (result?.name || "Optimized_Resume")
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]/g, "_");
+      const filename = `${candidateName || "Candidate"}_ATS_Resume.pdf`;
+
+      // Temporarily remove edit mode styling and indicators for clean PDF export
+      element.classList.remove("is-editing");
+      element.classList.add("exporting-pdf");
+      const prevContentEditable = element.getAttribute("contenteditable");
+      element.setAttribute("contenteditable", "false");
+
+      const html2pdfModule = await import("html2pdf.js");
+      const html2pdf = html2pdfModule.default || html2pdfModule;
+
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: filename,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          scrollY: 0
+        },
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
+          orientation: "portrait"
+        },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] }
+      };
+
+      await html2pdf().set(opt).from(element).save();
+
+      // Restore edit states
+      element.classList.remove("exporting-pdf");
+      if (isEditing) {
+        element.classList.add("is-editing");
+        element.setAttribute("contenteditable", "true");
+      } else if (prevContentEditable) {
+        element.setAttribute("contenteditable", prevContentEditable);
+      }
+    } catch (err) {
+      console.error("PDF Export Error:", err);
+      element?.classList.remove("exporting-pdf");
+      if (isEditing) {
+        element?.classList.add("is-editing");
+        element?.setAttribute("contenteditable", "true");
+      }
+      window.print();
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
@@ -190,10 +297,126 @@ function OptimizeResume() {
                 {result.atsScore || 0}%
               </div>
             </div>
-            <button className="export-btn" onClick={handleExportPDF}>
-              Export PDF
-            </button>
+            <div className="result-actions">
+              <button 
+                type="button"
+                className={`edit-mode-btn ${isEditing ? "active" : ""}`}
+                onClick={handleToggleEdit}
+              >
+                {isEditing ? "💾 Done Editing" : "✏️ Edit Resume"}
+              </button>
+              <button 
+                type="button"
+                className="export-btn" 
+                onClick={handleExportPDF}
+                disabled={exporting}
+              >
+                {exporting ? "📥 Generating PDF..." : "📥 Download PDF"}
+              </button>
+            </div>
           </div>
+
+          {isEditing && (
+            <div className="edit-toolbar-container">
+              <div className="edit-toolbar">
+                <div className="toolbar-group">
+                  <button
+                    type="button"
+                    className="toolbar-btn"
+                    title="Bold text (Ctrl+B)"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      document.execCommand("bold");
+                    }}
+                  >
+                    <strong>B</strong>
+                  </button>
+                  <button
+                    type="button"
+                    className="toolbar-btn"
+                    title="Italic text (Ctrl+I)"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      document.execCommand("italic");
+                    }}
+                  >
+                    <em>I</em>
+                  </button>
+                  <button
+                    type="button"
+                    className="toolbar-btn"
+                    title="Underline text (Ctrl+U)"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      document.execCommand("underline");
+                    }}
+                  >
+                    <u>U</u>
+                  </button>
+                  <button
+                    type="button"
+                    className="toolbar-btn"
+                    title="Insert Bullet Point"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      document.execCommand("insertUnorderedList");
+                    }}
+                  >
+                    • Bullet List
+                  </button>
+                </div>
+
+                <div className="toolbar-divider"></div>
+
+                <div className="toolbar-group">
+                  <button
+                    type="button"
+                    className="toolbar-btn"
+                    title="Undo last change (Ctrl+Z)"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      document.execCommand("undo");
+                    }}
+                  >
+                    ↩ Undo
+                  </button>
+                  <button
+                    type="button"
+                    className="toolbar-btn"
+                    title="Redo change (Ctrl+Y)"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      document.execCommand("redo");
+                    }}
+                  >
+                    ↪ Redo
+                  </button>
+                </div>
+
+                <div className="toolbar-divider"></div>
+
+                <div className="toolbar-group" style={{ marginLeft: "auto" }}>
+                  <button
+                    type="button"
+                    className="toolbar-btn reset-btn"
+                    title="Discard manual edits and reset back to the AI-generated resume"
+                    onClick={handleResetToOriginal}
+                  >
+                    🔄 Reset to AI Original
+                  </button>
+                </div>
+              </div>
+
+              <div className="edit-mode-banner">
+                <div className="edit-banner-content">
+                  <span className="edit-banner-icon">✏️</span>
+                  <div className="edit-banner-text">
+                    <strong>Live Manual Edit Mode:</strong> Click and type anywhere directly on the resume preview below to edit names, summaries, bullets, dates, or skills. Use the toolbar or standard shortcuts (<code>Ctrl+B</code>, <code>Ctrl+I</code>, <code>Ctrl+Z</code>). When satisfied, click <strong>💾 Done Editing</strong> or <strong>📥 Download PDF</strong>!
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {result.missingKeywords && result.missingKeywords.length > 0 && (
             <section>
@@ -208,7 +431,7 @@ function OptimizeResume() {
             </section>
           )}
 
-          <div className="resume-preview-container">
+          <div className="resume-preview-container" ref={resumeRef}>
             {renderSelectedTemplate()}
           </div>
         </div>

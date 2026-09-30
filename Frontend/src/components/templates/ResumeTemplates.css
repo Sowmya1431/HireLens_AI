@@ -299,3 +299,86 @@
   font-weight: 500;
   color: #2e4a6f;
 }
+
+/* ===================================================
+   LIVE INTERACTIVE RESUME EDITING STYLES
+   =================================================== */
+
+.resume.is-editing {
+  cursor: text;
+  box-shadow: 0 0 0 2.5px #3b82f6, 0 12px 36px rgba(59, 130, 246, 0.18) !important;
+  transition: all 0.2s ease;
+  position: relative;
+  outline: none !important;
+}
+
+/* Subtle ribbon on top of the resume in edit mode */
+.resume.is-editing::before {
+  content: "✏️ Live Edit Mode — Click any text or bullet point to modify directly";
+  display: block;
+  background: #2563eb;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 14px;
+  text-align: center;
+  border-radius: 4px 4px 0 0;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.resume.modern.is-editing::before {
+  margin: -35px -35px 20px -35px;
+}
+
+.resume.classic.is-editing::before {
+  margin: -35px -45px 20px -45px;
+}
+
+.resume.professional.is-editing::before {
+  margin: -35px -40px 20px -40px;
+}
+
+/* Hover indication on editable elements */
+.resume.is-editing h1:hover,
+.resume.is-editing h2:hover,
+.resume.is-editing h3:hover,
+.resume.is-editing p:hover,
+.resume.is-editing li:hover,
+.resume.is-editing .modern-chip:hover {
+  outline: 1.5px dashed rgba(59, 130, 246, 0.55);
+  background: rgba(59, 130, 246, 0.04);
+  border-radius: 3px;
+}
+
+/* Active focus ring on currently focused element */
+.resume.is-editing *:focus {
+  outline: 2px solid #2563eb !important;
+  outline-offset: 2px;
+  background: rgba(59, 130, 246, 0.06) !important;
+  border-radius: 3px;
+}
+
+/* Pristine styling during PDF export or print */
+.resume.exporting-pdf,
+.resume.exporting-pdf::before,
+.resume.exporting-pdf * {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+.resume.exporting-pdf::before {
+  display: none !important;
+}
+
+@media print {
+  .resume.is-editing::before {
+    display: none !important;
+  }
+  .resume.is-editing {
+    box-shadow: none !important;
+    outline: none !important;
+  }
+}

@@ -1,32 +1,36 @@
 const getResumeQualityScore = (resumeText) => {
-    let score = 0;
+  let score = 0;
 
-    const text = resumeText.toLowerCase();
+  if (!resumeText || typeof resumeText !== "string") {
+    return 0;
+  }
 
-    // Skills section
-    if (text.includes("skills")) {
-        score += 5;
-    }
+  const text = resumeText.toLowerCase();
 
-    // Projects section
-    if (text.includes("project") || text.includes("projects")) {
-        score += 7;
-    }
+  // Skills section
+  if (text.includes("skills")) {
+    score += 5;
+  }
 
-    // Education section
-    if (text.includes("education")) {
-        score += 4;
-    }
+  // Projects section
+  if (text.includes("project") || text.includes("projects")) {
+    score += 7;
+  }
 
-    // Experience / Internship
-    if (
-        text.includes("experience") ||
-        text.includes("internship")
-    ) {
-        score += 4;
-    }
+  // Education section
+  if (text.includes("education")) {
+    score += 4;
+  }
 
-    return score; // out of 20
+  // Experience / Internship
+  if (
+    text.includes("experience") ||
+    text.includes("internship")
+  ) {
+    score += 4;
+  }
+
+  return score; // out of 20
 };
 
 module.exports = getResumeQualityScore;
