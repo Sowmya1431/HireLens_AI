@@ -254,7 +254,7 @@ function Register() {
       if (res.ok) {
         navigate("/login");
       } else {
-        setError(data.message || "Registration failed.");
+        setError(data.error || data.message || "Registration failed.");
       }
     } catch {
       setError("Network error. Please try again.");

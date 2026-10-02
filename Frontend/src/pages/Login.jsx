@@ -34,7 +34,7 @@ function Login() {
         localStorage.setItem("token", data.token);
         navigate("/dashboard");
       } else {
-        setError(data.message || "Invalid email or password.");
+        setError(data.error || data.message || "Invalid email or password.");
       }
     } catch {
       setError("Network error. Please try again.");
