@@ -1,13 +1,15 @@
 /**
  * Centralized API Configuration
- * Supports VITE_API_URL and VITE_BACKEND_URL from .env
- * Automatically normalizes trailing slashes and ensures /api path
+ * Production Render Backend: https://hirelens-ai-ywv3.onrender.com/api
  */
 
+const envApi = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL;
+
+// If env is missing OR still pointing to localhost:5000, unconditionally use the live Render backend!
 const rawApi =
-  import.meta.env.VITE_API_URL ||
-  import.meta.env.VITE_BACKEND_URL ||
-  "https://hirelens-ai-ywv3.onrender.com/api";
+  envApi && !envApi.includes("localhost:5000")
+    ? envApi
+    : "https://hirelens-ai-ywv3.onrender.com/api";
 
 const cleanBase = String(rawApi).trim().replace(/\/+$/, "");
 

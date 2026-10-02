@@ -10,9 +10,11 @@ const chatbotRoutes = require("./routes/chatbot");
 
 const authmiddleware = require('./middleware/authmiddleware');
 
-const app = express();
-
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 // IMPORTANT: upload route BEFORE express.json
 app.use('/api/resume', resumeRoutes);
