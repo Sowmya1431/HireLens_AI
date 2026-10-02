@@ -4,10 +4,10 @@ import DashboardHome from "../components/DashboardHome";
 import ATSAnalyzer from "../components/ATSAnalyzer";
 import OptimizeResume from "../components/OptimizeResume";
 import Contact from "../components/Contact";
+import API from "../config/api";
 
 function Dashboard() {
   const [activePage, setActivePage] = useState("dashboard");
-  const API = import.meta.env.VITE_API_URL;
 
   const renderPage = () => {
     switch (activePage) {

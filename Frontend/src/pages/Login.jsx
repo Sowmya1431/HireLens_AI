@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import API from "../config/api";
 import "../components/Login.css";
 
 function Login() {
-  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ email: "", password: "" });

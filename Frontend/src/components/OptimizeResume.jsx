@@ -8,10 +8,10 @@ import ProfessionalTemplate from "./templates/ProfessionalTemplate";
 import ModernTemplate from "./templates/ModernTemplate";
 
 import { detectResumeLevel, exportResumePDF } from "../utils/resumePdfExporter";
+import API from "../config/api";
 import "./OptimizeResume.css";
 
 function OptimizeResume() {
-  const API = import.meta.env.VITE_API_URL;
   console.log("API URL:", API);
 
   const [resume, setResume] = useState(null);

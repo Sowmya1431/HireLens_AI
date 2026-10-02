@@ -1,4 +1,5 @@
 import { useState } from "react";
+import API from "../config/api";
 import "./Contact.css";
 
 function Contact() {
@@ -12,7 +13,7 @@ function Contact() {
   const handleSubmit = async () => {
     setFormStatus({ loading: true, success: "", error: "" });
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(`${API}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

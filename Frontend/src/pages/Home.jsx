@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import API from "../config/api";
 import "../components/Home.css";
 
 function Home() {
@@ -17,7 +18,7 @@ function Home() {
   const handleSubmit = async () => {
     setFormStatus({ loading: true, success: "", error: "" });
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(`${API}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

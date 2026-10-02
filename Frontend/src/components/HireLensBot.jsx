@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
+import API_BASE from "../config/api";
 import "./HireLensBot.css";
 import botAvatar from "./templates/bot.jpg";
 
-const API = "/api/chatbot";
+const API = `${API_BASE}/chatbot`;
 
 const HR_QUESTIONS = [
   "Tell me about yourself.",
@@ -98,7 +99,7 @@ Format cleanly.`;
     try {
       const formData = new FormData();
       formData.append("resume", file);
-      const extractRes = await fetch("/api/ats/extract-text", {
+      const extractRes = await fetch(`${API_BASE}/ats/extract-text`, {
         method: "POST",
         body: formData,
       });

@@ -5,9 +5,8 @@ import {
   PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend,
   PieChart, Pie
 } from "recharts";
+import API from "../config/api";
 import "./ATSAnalyzer.css";
-
-const API = import.meta.env.VITE_API_URL;
 
 /* ─────────────────────────────────────────
    GAUGE – animated semicircle (Image 2)
