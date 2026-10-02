@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { isAuthenticated } from "../utils/auth";
 import API from "../config/api";
 import "../components/Home.css";
 
@@ -90,8 +91,14 @@ function Home() {
           <a href="#hero" onClick={scrollTo("hero")}>Home</a>
           <a href="#about" onClick={scrollTo("about")}>About</a>
           <a href="#contact" onClick={scrollTo("contact")}>Contact</a>
-          <Link to="/login" className="hl-nav-btn">Login</Link>
-          <Link to="/register" className="hl-nav-btn primary">Register</Link>
+          {isAuthenticated() ? (
+            <Link to="/dashboard" className="hl-nav-btn primary">Dashboard →</Link>
+          ) : (
+            <>
+              <Link to="/login" className="hl-nav-btn">Login</Link>
+              <Link to="/register" className="hl-nav-btn primary">Register</Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -253,7 +260,7 @@ function Home() {
             ))}
           </div>
           <div className="hl-about-cta-wrap">
-            <Link to="/register" className="hl-cta">Start Analysing My Resume →</Link>
+            <Link to={isAuthenticated() ? "/dashboard" : "/register"} className="hl-cta">Start Analysing My Resume →</Link>
           </div>
         </div>
       </section>

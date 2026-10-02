@@ -30,13 +30,14 @@ export default function DashboardNavbar({ setActivePage, activePage = "dashboard
 
   const handleNav = (key) => {
     setActivePage(key);
+    navigate(key === "dashboard" ? "/dashboard" : `/${key}`);
     setMenuOpen(false);
     setAvatarOpen(false);
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   return (

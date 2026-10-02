@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import API from "../config/api";
 import "../components/Login.css";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +33,8 @@ function Login() {
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
-        navigate("/dashboard");
+        const destination = location.state?.from?.pathname || "/dashboard";
+        navigate(destination, { replace: true });
       } else {
         setError(data.error || data.message || "Invalid email or password.");
       }

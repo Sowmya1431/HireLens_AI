@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DashboardNavbar from "../components/DashboardNavbar";
 import DashboardHome from "../components/DashboardHome";
 import ATSAnalyzer from "../components/ATSAnalyzer";
@@ -6,8 +6,14 @@ import OptimizeResume from "../components/OptimizeResume";
 import Contact from "../components/Contact";
 import API from "../config/api";
 
-function Dashboard() {
-  const [activePage, setActivePage] = useState("dashboard");
+function Dashboard({ initialPage = "dashboard" }) {
+  const [activePage, setActivePage] = useState(initialPage);
+
+  useEffect(() => {
+    if (initialPage) {
+      setActivePage(initialPage);
+    }
+  }, [initialPage]);
 
   const renderPage = () => {
     switch (activePage) {
@@ -26,7 +32,7 @@ function Dashboard() {
       case "contact":
         return <Contact />;
       default:
-        return <DashboardHome />;
+        return <DashboardHome onNavigate={setActivePage} />;
     }
   };
 
