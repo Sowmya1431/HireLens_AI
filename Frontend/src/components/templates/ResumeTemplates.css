@@ -1,11 +1,22 @@
+/* ===================================================
+   HIRELENS AI - ATS RESUME TEMPLATES CSS
+   Supports:
+   - Classic, Professional, and Modern templates
+   - Fresher Mode (Strictly optimized for 1-Page fit)
+   - Experienced Mode (Clean flow across 1 to 2 pages, max 2)
+   - Live Manual Editing
+   - Razor-sharp PDF Export & Print
+   =================================================== */
+
 .resume {
   width: 850px;
   margin: 20px auto;
-  background: white;
+  background: #ffffff;
   padding: 30px;
-  color: black;
+  color: #111111;
   font-family: Georgia, serif;
   box-sizing: border-box;
+  position: relative;
 }
 
 .resume h1 {
@@ -13,226 +24,234 @@
 }
 
 .resume section {
-  margin-top: 15px;
+  margin-top: 14px;
 }
 
 .resume h2 {
-  border-bottom: 1px solid black;
-  padding-bottom: 4px;
+  border-bottom: 1px solid #111111;
+  padding-bottom: 3px;
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-/* CLASSIC TEMPLATE */
+/* ===================================================
+   1. CLASSIC ATS TEMPLATE
+   =================================================== */
 .resume.classic {
   width: 850px;
   margin: auto;
-  background: white;
-  color: #111;
-  padding: 35px 45px;
+  background: #ffffff;
+  color: #111111;
+  padding: 32px 42px;
   font-family: "Times New Roman", Times, serif;
-  line-height: 1.4;
+  line-height: 1.38;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
 }
 
 .classic-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .classic-header h1 {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   letter-spacing: 0.5px;
 }
 
 .classic-header p {
-  font-size: 14.5px;
+  font-size: 13.5px;
   margin: 0;
-  color: #333;
+  color: #333333;
 }
 
 .classic-section {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .classic-section h2 {
-  font-size: 16.5px;
+  font-size: 15.5px;
   font-weight: 700;
-  border-bottom: 1.5px solid #000;
-  margin-bottom: 10px;
-  padding-bottom: 3px;
+  border-bottom: 1.5px solid #000000;
+  margin-bottom: 8px;
+  padding-bottom: 2px;
   letter-spacing: 1px;
 }
 
 .classic-summary {
-  font-size: 14px;
+  font-size: 13.5px;
   margin: 0;
   text-align: justify;
+  line-height: 1.38;
 }
 
 .classic-block {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .classic-project {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .classic-project h3 {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  margin: 0 0 4px 0;
+  margin: 0 0 3px 0;
 }
 
 .classic-project ul,
 .classic-block ul {
-  padding-left: 20px;
-  margin: 4px 0 0 0;
+  padding-left: 18px;
+  margin: 3px 0 0 0;
 }
 
 .classic-project li,
 .classic-block li {
-  margin-bottom: 4px;
-  font-size: 14px;
+  margin-bottom: 3px;
+  font-size: 13.5px;
+  line-height: 1.35;
 }
 
 .resume.classic p {
-  font-size: 14px;
+  font-size: 13.5px;
   margin: 0;
 }
 
-/* PROFESSIONAL TEMPLATE */
+/* ===================================================
+   2. PROFESSIONAL TEMPLATE
+   =================================================== */
 .resume.professional {
   width: 850px;
   margin: auto;
-  background: white;
-  padding: 35px 40px;
-  color: #222;
+  background: #ffffff;
+  padding: 32px 38px;
+  color: #222222;
   font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.4;
+  line-height: 1.38;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
 }
 
 .pro-header {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .pro-header h1 {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: 4px;
-  margin-bottom: 5px;
+  letter-spacing: 3px;
+  margin-bottom: 4px;
   text-transform: uppercase;
 }
 
 .pro-header p {
-  font-size: 16.5px;
-  letter-spacing: 2px;
+  font-size: 15px;
+  letter-spacing: 1.5px;
   color: #9a7a2e;
   margin: 0;
   font-weight: 600;
 }
 
 .pro-contact {
-  font-size: 14.5px;
-  color: #555;
-  margin: 6px 0 0 0 !important;
+  font-size: 13.5px;
+  color: #555555;
+  margin: 4px 0 0 0 !important;
 }
 
 .pro-divider {
   height: 2px;
   background: #b89b5e;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .pro-grid {
   display: grid;
   grid-template-columns: 1.8fr 1fr;
-  gap: 30px;
+  gap: 24px;
 }
 
 .pro-left section,
 .pro-right section {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .pro-left h2,
 .pro-right h2 {
-  font-size: 15px;
-  letter-spacing: 3px;
+  font-size: 14.5px;
+  letter-spacing: 2px;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border-bottom: 1.5px solid #b89b5e;
-  padding-bottom: 3px;
+  padding-bottom: 2px;
   text-transform: uppercase;
-  color: #111;
+  color: #111111;
 }
 
 .pro-left p,
 .pro-right p,
 .pro-right li,
 .pro-left li {
-  font-size: 14px;
-  line-height: 1.4;
-  margin: 0 0 4px 0;
+  font-size: 13px;
+  line-height: 1.36;
+  margin: 0 0 3px 0;
 }
 
 .pro-block {
-  margin-bottom: 12px;
+  margin-bottom: 9px;
 }
 
 .pro-block h3 {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
-  margin: 0 0 4px 0;
-  color: #111;
+  margin: 0 0 3px 0;
+  color: #111111;
 }
 
 .pro-right ul,
 .pro-left ul {
-  padding-left: 18px;
-  margin: 4px 0 0 0;
+  padding-left: 16px;
+  margin: 3px 0 0 0;
 }
 
 .pro-left li {
   margin-bottom: 3px;
 }
 
-/* MODERN TEMPLATE */
+/* ===================================================
+   3. MODERN TEMPLATE
+   =================================================== */
 .resume.modern {
   width: 850px;
   margin: auto;
-  background: white;
-  padding: 35px;
+  background: #ffffff;
+  padding: 30px 36px;
   font-family: Arial, Helvetica, sans-serif;
   color: #2e4a6f;
-  line-height: 1.4;
+  line-height: 1.38;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
 }
 
 .modern-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .modern-header h1 {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 800;
   color: #2f4f79;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .modern-header h3 {
-  font-size: 18px;
-  margin: 0 0 10px 0;
+  font-size: 16px;
+  margin: 0 0 8px 0;
   color: #2f4f79;
   text-transform: uppercase;
   font-weight: 600;
@@ -240,65 +259,297 @@
 }
 
 .modern-contact {
-  font-size: 14.5px;
+  font-size: 13.5px;
   color: #3b5f8a;
   margin: 0;
 }
 
 .modern-bar {
-  margin-top: 15px;
-  height: 6px;
+  margin-top: 12px;
+  height: 5px;
   background: #2f4f79;
   border-bottom: 2px solid #1f324d;
 }
 
 .modern-section {
-  margin-top: 18px;
+  margin-top: 14px;
 }
 
 .modern-section h2 {
-  font-size: 15.5px;
+  font-size: 14.5px;
   font-weight: 800;
   color: #2f4f79;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border-bottom: 1.5px solid #9ba8b8;
-  padding-bottom: 4px;
+  padding-bottom: 3px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .modern-section p,
 .modern-section li {
-  font-size: 14px;
-  line-height: 1.4;
-  margin: 0 0 4px 0;
+  font-size: 13px;
+  line-height: 1.36;
+  margin: 0 0 3px 0;
 }
 
 .modern-block {
-  margin-bottom: 12px;
+  margin-bottom: 9px;
 }
 
 .modern-block h3 {
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 700;
-  margin: 0 0 4px 0;
+  margin: 0 0 3px 0;
   color: #2f4f79;
 }
 
 .modern-skills {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
 }
 
 .modern-chip {
-  padding: 4px 10px;
+  padding: 3px 9px;
   background: #eaf0f8;
   border-radius: 4px;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 500;
   color: #2e4a6f;
 }
+
+
+/* ===================================================
+   FRESHER MODE: STRICT 1-PAGE OPTIMIZED COMPACT DESIGN
+   (Tailored for students and fresh graduates)
+   =================================================== */
+
+.resume.fresher-mode {
+  padding: 22px 34px !important;
+  line-height: 1.32 !important;
+}
+
+/* Classic Fresher */
+.resume.classic.fresher-mode {
+  padding: 22px 36px !important;
+}
+
+.resume.classic.fresher-mode .classic-header {
+  margin-bottom: 10px !important;
+}
+
+.resume.classic.fresher-mode .classic-header h1 {
+  font-size: 25px !important;
+  margin-bottom: 2px !important;
+}
+
+.resume.classic.fresher-mode .classic-header p {
+  font-size: 12.5px !important;
+}
+
+.resume.classic.fresher-mode .classic-section {
+  margin-bottom: 9px !important;
+}
+
+.resume.classic.fresher-mode .classic-section h2 {
+  font-size: 13.5px !important;
+  margin-bottom: 5px !important;
+  padding-bottom: 2px !important;
+  letter-spacing: 0.5px !important;
+}
+
+.resume.classic.fresher-mode .classic-summary {
+  font-size: 12.5px !important;
+  line-height: 1.32 !important;
+}
+
+.resume.classic.fresher-mode .classic-block {
+  margin-bottom: 6px !important;
+}
+
+.resume.classic.fresher-mode .classic-project {
+  margin-bottom: 6px !important;
+}
+
+.resume.classic.fresher-mode .classic-project h3 {
+  font-size: 13px !important;
+  margin-bottom: 2px !important;
+}
+
+.resume.classic.fresher-mode ul {
+  padding-left: 16px !important;
+  margin: 2px 0 0 0 !important;
+}
+
+.resume.classic.fresher-mode li {
+  font-size: 12.5px !important;
+  margin-bottom: 2px !important;
+  line-height: 1.3 !important;
+}
+
+.resume.classic.fresher-mode p {
+  font-size: 12.5px !important;
+}
+
+/* Modern Fresher */
+.resume.modern.fresher-mode {
+  padding: 20px 32px !important;
+}
+
+.resume.modern.fresher-mode .modern-header {
+  margin-bottom: 10px !important;
+}
+
+.resume.modern.fresher-mode .modern-header h1 {
+  font-size: 26px !important;
+  margin-bottom: 2px !important;
+}
+
+.resume.modern.fresher-mode .modern-header h3 {
+  font-size: 14px !important;
+  margin-bottom: 4px !important;
+}
+
+.resume.modern.fresher-mode .modern-contact {
+  font-size: 12.5px !important;
+}
+
+.resume.modern.fresher-mode .modern-bar {
+  margin-top: 8px !important;
+  height: 4px !important;
+}
+
+.resume.modern.fresher-mode .modern-section {
+  margin-top: 9px !important;
+}
+
+.resume.modern.fresher-mode .modern-section h2 {
+  font-size: 13.5px !important;
+  margin-bottom: 5px !important;
+  padding-bottom: 2px !important;
+}
+
+.resume.modern.fresher-mode .modern-block {
+  margin-bottom: 6px !important;
+}
+
+.resume.modern.fresher-mode .modern-block h3 {
+  font-size: 13px !important;
+  margin-bottom: 2px !important;
+}
+
+.resume.modern.fresher-mode p,
+.resume.modern.fresher-mode li {
+  font-size: 12.5px !important;
+  line-height: 1.3 !important;
+  margin-bottom: 2px !important;
+}
+
+.resume.modern.fresher-mode ul {
+  margin: 2px 0 0 0 !important;
+  padding-left: 16px !important;
+}
+
+.resume.modern.fresher-mode .modern-skills {
+  gap: 4px !important;
+}
+
+.resume.modern.fresher-mode .modern-chip {
+  padding: 2px 8px !important;
+  font-size: 11.5px !important;
+}
+
+/* Professional Fresher */
+.resume.professional.fresher-mode {
+  padding: 22px 32px !important;
+}
+
+.resume.professional.fresher-mode .pro-header {
+  margin-bottom: 8px !important;
+}
+
+.resume.professional.fresher-mode .pro-header h1 {
+  font-size: 26px !important;
+  letter-spacing: 2px !important;
+  margin-bottom: 2px !important;
+}
+
+.resume.professional.fresher-mode .pro-header p {
+  font-size: 13.5px !important;
+  letter-spacing: 1px !important;
+}
+
+.resume.professional.fresher-mode .pro-contact {
+  font-size: 12px !important;
+  margin: 3px 0 0 0 !important;
+}
+
+.resume.professional.fresher-mode .pro-divider {
+  margin-bottom: 10px !important;
+  height: 1.5px !important;
+}
+
+.resume.professional.fresher-mode .pro-grid {
+  gap: 18px !important;
+}
+
+.resume.professional.fresher-mode section {
+  margin-bottom: 10px !important;
+}
+
+.resume.professional.fresher-mode h2 {
+  font-size: 13px !important;
+  letter-spacing: 1.5px !important;
+  margin-bottom: 5px !important;
+  padding-bottom: 2px !important;
+}
+
+.resume.professional.fresher-mode .pro-block {
+  margin-bottom: 6px !important;
+}
+
+.resume.professional.fresher-mode .pro-block h3 {
+  font-size: 12.5px !important;
+  margin-bottom: 2px !important;
+}
+
+.resume.professional.fresher-mode p,
+.resume.professional.fresher-mode li {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  margin-bottom: 2px !important;
+}
+
+.resume.professional.fresher-mode ul {
+  padding-left: 15px !important;
+  margin: 2px 0 0 0 !important;
+}
+
+
+/* ===================================================
+   EXPERIENCED MODE: CLEAN 1-2 PAGE FLOW (MAX 2 PAGES)
+   =================================================== */
+
+.resume.experienced-mode {
+  padding: 30px 40px;
+}
+
+.resume.experienced-mode section,
+.resume.experienced-mode .classic-block,
+.resume.experienced-mode .modern-block,
+.resume.experienced-mode .pro-block,
+.resume.experienced-mode .classic-project {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.resume.experienced-mode h2,
+.resume.experienced-mode h3 {
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
 
 /* ===================================================
    LIVE INTERACTIVE RESUME EDITING STYLES
@@ -312,7 +563,6 @@
   outline: none !important;
 }
 
-/* Subtle ribbon on top of the resume in edit mode */
 .resume.is-editing::before {
   content: "✏️ Live Edit Mode — Click any text or bullet point to modify directly";
   display: block;
@@ -326,21 +576,9 @@
   border-radius: 4px 4px 0 0;
   letter-spacing: 0.3px;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  margin-bottom: 15px;
 }
 
-.resume.modern.is-editing::before {
-  margin: -35px -35px 20px -35px;
-}
-
-.resume.classic.is-editing::before {
-  margin: -35px -45px 20px -45px;
-}
-
-.resume.professional.is-editing::before {
-  margin: -35px -40px 20px -40px;
-}
-
-/* Hover indication on editable elements */
 .resume.is-editing h1:hover,
 .resume.is-editing h2:hover,
 .resume.is-editing h3:hover,
@@ -352,7 +590,6 @@
   border-radius: 3px;
 }
 
-/* Active focus ring on currently focused element */
 .resume.is-editing *:focus {
   outline: 2px solid #2563eb !important;
   outline-offset: 2px;
@@ -360,25 +597,54 @@
   border-radius: 3px;
 }
 
-/* Pristine styling during PDF export or print */
+
+/* ===================================================
+   PDF EXPORT & PRINT MEDIA STYLES
+   =================================================== */
+
 .resume.exporting-pdf,
 .resume.exporting-pdf::before,
 .resume.exporting-pdf * {
   outline: none !important;
   box-shadow: none !important;
-  background-color: transparent !important;
 }
 
 .resume.exporting-pdf::before {
   display: none !important;
 }
 
+@page {
+  size: A4 portrait;
+  margin: 8mm;
+}
+
 @media print {
-  .resume.is-editing::before {
-    display: none !important;
+  body {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
-  .resume.is-editing {
+
+  .resume {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
     box-shadow: none !important;
-    outline: none !important;
+  }
+
+  .resume.fresher-mode {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .resume.is-editing::before,
+  .edit-toolbar-container,
+  .edit-mode-banner,
+  .optimize-header,
+  .optimize-form,
+  .result-header,
+  .page-format-control,
+  .missing-box {
+    display: none !important;
   }
 }

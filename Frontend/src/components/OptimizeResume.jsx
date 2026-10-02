@@ -7,6 +7,7 @@ import ClassicTemplate from "./templates/ClassicTemplate";
 import ProfessionalTemplate from "./templates/ProfessionalTemplate";
 import ModernTemplate from "./templates/ModernTemplate";
 
+import { detectResumeLevel, exportResumePDF } from "../utils/resumePdfExporter";
 import "./OptimizeResume.css";
 
 function OptimizeResume() {
@@ -21,6 +22,8 @@ function OptimizeResume() {
   const [exporting, setExporting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [renderKey, setRenderKey] = useState(0);
+  const [pageMode, setPageMode] = useState("fresher");
+  const [autoDetectedMode, setAutoDetectedMode] = useState("fresher");
 
   const resumeRef = useRef(null);
 
@@ -87,6 +90,10 @@ function OptimizeResume() {
         );
       }
 
+      // Automatically determine if candidate is a Fresher or Experienced
+      const detected = detectResumeLevel(data);
+      setAutoDetectedMode(detected);
+      setPageMode(detected);
       setResult(data);
     } catch (err) {
       console.error("Optimization Error:", err);
@@ -108,7 +115,7 @@ function OptimizeResume() {
       resumeEl.setAttribute("contenteditable", "false");
       resumeEl.classList.remove("is-editing");
     }
-  }, [isEditing, selectedTemplate, renderKey, result]);
+  }, [isEditing, selectedTemplate, renderKey, result, pageMode]);
 
   const handleToggleEdit = () => {
     const resumeEl = resumeRef.current?.querySelector(".resume");
@@ -142,13 +149,13 @@ function OptimizeResume() {
 
     switch (selectedTemplate) {
       case "classic":
-        return <ClassicTemplate key={`classic-${renderKey}`} data={result} />;
+        return <ClassicTemplate key={`classic-${renderKey}-${pageMode}`} data={result} pageMode={pageMode} />;
 
       case "professional":
-        return <ProfessionalTemplate key={`pro-${renderKey}`} data={result} />;
+        return <ProfessionalTemplate key={`pro-${renderKey}-${pageMode}`} data={result} pageMode={pageMode} />;
 
       case "modern":
-        return <ModernTemplate key={`modern-${renderKey}`} data={result} />;
+        return <ModernTemplate key={`modern-${renderKey}-${pageMode}`} data={result} pageMode={pageMode} />;
 
       default:
         return null;
@@ -164,57 +171,14 @@ function OptimizeResume() {
 
     try {
       setExporting(true);
-
-      const candidateName = (result?.name || "Optimized_Resume")
-        .trim()
-        .replace(/[^a-zA-Z0-9_-]/g, "_");
-      const filename = `${candidateName || "Candidate"}_ATS_Resume.pdf`;
-
-      // Temporarily remove edit mode styling and indicators for clean PDF export
-      element.classList.remove("is-editing");
-      element.classList.add("exporting-pdf");
-      const prevContentEditable = element.getAttribute("contenteditable");
-      element.setAttribute("contenteditable", "false");
-
-      const html2pdfModule = await import("html2pdf.js");
-      const html2pdf = html2pdfModule.default || html2pdfModule;
-
-      const opt = {
-        margin: [8, 8, 8, 8],
-        filename: filename,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          logging: false,
-          scrollY: 0
-        },
-        jsPDF: {
-          unit: "mm",
-          format: "a4",
-          orientation: "portrait"
-        },
-        pagebreak: { mode: ["avoid-all", "css", "legacy"] }
-      };
-
-      await html2pdf().set(opt).from(element).save();
-
-      // Restore edit states
-      element.classList.remove("exporting-pdf");
-      if (isEditing) {
-        element.classList.add("is-editing");
-        element.setAttribute("contenteditable", "true");
-      } else if (prevContentEditable) {
-        element.setAttribute("contenteditable", prevContentEditable);
-      }
+      await exportResumePDF({
+        element,
+        candidateName: result?.name,
+        pageMode
+      });
     } catch (err) {
       console.error("PDF Export Error:", err);
-      element?.classList.remove("exporting-pdf");
-      if (isEditing) {
-        element?.classList.add("is-editing");
-        element?.setAttribute("contenteditable", "true");
-      }
-      window.print();
+      alert("PDF Export failed: " + (err.message || "Unknown error"));
     } finally {
       setExporting(false);
     }
@@ -297,6 +261,40 @@ function OptimizeResume() {
                 {result.atsScore || 0}%
               </div>
             </div>
+
+            {/* Resume Target Format: Fresher (1-Page) vs Experienced (1-2 Pages) */}
+            <div className="page-mode-wrapper">
+              <div className="page-mode-header">
+                <span className="page-mode-title">📄 PDF Target Format:</span>
+                <span className="page-mode-detected">
+                  {autoDetectedMode === "fresher" ? "✨ Auto: Fresher" : "✨ Auto: Experienced"}
+                </span>
+              </div>
+              <div className="page-mode-toggle">
+                <button
+                  type="button"
+                  className={`page-mode-btn ${pageMode === "fresher" ? "active" : ""}`}
+                  onClick={() => setPageMode("fresher")}
+                  title="Strictly format resume as a 1-page PDF (Best for freshers & students)"
+                >
+                  🎓 Fresher (1 Page)
+                </button>
+                <button
+                  type="button"
+                  className={`page-mode-btn ${pageMode === "experienced" ? "active" : ""}`}
+                  onClick={() => setPageMode("experienced")}
+                  title="Format resume across 1 to 2 pages based on career depth (Max 2 pages)"
+                >
+                  💼 Experienced (1-2 Pages)
+                </button>
+              </div>
+              <p className="page-mode-desc">
+                {pageMode === "fresher" 
+                  ? "✓ Guaranteed 1-page PDF export with clean, compact ATS formatting."
+                  : "✓ Clean 1-2 page layout with section protection. Capped at 2 pages maximum."}
+              </p>
+            </div>
+
             <div className="result-actions">
               <button 
                 type="button"
