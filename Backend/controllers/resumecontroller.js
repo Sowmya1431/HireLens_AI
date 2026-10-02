@@ -1,6 +1,6 @@
 const { getBucket } = require("../config/gridfs");
 const { Readable } = require("stream");
-const Resume = require("../models/Resume");
+const Resume = require("../models/resume");
 const extractPDFText = require("../utils/pdfparser");
 
 

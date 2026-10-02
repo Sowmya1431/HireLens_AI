@@ -1,6 +1,6 @@
 // controllers/atsController.js
-const Resume = require("../models/Resume");
-const Analysis = require("../models/Analysis");
+const Resume = require("../models/resume");
+const Analysis = require("../models/analysis");
 const getResumeQualityScore = require("../utils/resumeQuality");
 const analyzeWithGroq = require("../services/groqService");
 

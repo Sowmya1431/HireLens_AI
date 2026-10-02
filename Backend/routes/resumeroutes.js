@@ -1,7 +1,7 @@
 const express = require("express");
-const upload = require("../middleware/uploadMiddleware");
+const upload = require("../middleware/uploadmiddleware");
 const { uploadResume } = require("../controllers/resumecontroller");
-const protect = require("../middleware/authMiddleware");
+const protect = require("../middleware/authmiddleware");
 
 const router = express.Router();
 

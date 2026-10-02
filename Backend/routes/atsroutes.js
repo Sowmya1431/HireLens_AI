@@ -1,6 +1,6 @@
 // routes/atsRoutes.js
 const express = require("express");
-const protect = require("../middleware/authMiddleware");
+const protect = require("../middleware/authmiddleware");
 const { analyzeResume, getAnalysisHistory, getLatestAnalysis } = require("../controllers/atsController");
 
 const router = express.Router();

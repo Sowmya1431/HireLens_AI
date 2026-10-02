@@ -8,7 +8,7 @@ const contactRoutes = require("./routes/contactRoutes");
 const optimizeRoutes = require("./routes/optimizeRoutes"); // NEW
 const chatbotRoutes = require("./routes/chatbot");
 
-const authmiddleware = require('./middleware/authMiddleware');
+const authmiddleware = require('./middleware/authmiddleware');
 
 const app = express();
 
